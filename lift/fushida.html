@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>厦门市特种设备检验检测院电梯信息WAP查询系统</title>
+<style type="text/css">
+body,div,p,a,table,textarea,form,input,img,ul,li{
+        margin:0px;
+        padding:0px;
+        }
+body{
+        font-size:12px;
+        margin:0 auto;
+        width:240px;
+        display:block;
+        line-height:1.4em;
+        }
+div,p,img,ul{
+        display:block;
+        }
+li{
+        list-style:none;
+        }
+a{
+        text-decoration:none;
+        }
+img{
+        border:0;
+        }
+
+/*-----------------------------------------------------------------*/
+.outFrame{
+        border:1px solid #dcdcdc;
+        }
+.site_logo{
+        text-align:left;
+        border-bottom:1px solid #969696;
+        }
+.site_title{
+        text-align:left;
+        border-top:2px solid #d6d6d6;
+        border-bottom:1px solid #969696;
+        }
+.content{
+        padding:10px 0 0 6px;
+        }
+.search{
+        padding:0 0 60px 12px;
+        }
+.textIn{
+        padding:2px 0;
+        }
+.textInput{
+        height:18px;
+        width:120px;
+        border:1px solid #bfbfbf;
+        }
+.searchBtn{
+        background:url(Images/search.jpg) no-repeat left center;
+        padding:20px 0 20px 46px;
+        }
+a.selectLink{
+        color:#000;
+        }
+a.txtLink{
+        color:#00a0e9;
+        text-decoration:underline;
+        padding-right:12px;
+        }
+.back{
+        padding:4px 0;
+        }
+.footer{
+        background:#dcdcdc;
+        text-align:left;
+        padding:4px 0 4px 6px;
+        }
+</style>
+
+<script type="text/javascript" src="time.js" charset="GB2312"></script>
+
+<script type="text/javascript">
+
+        function sumbit() {
+                doucment.forms[0].sumbit();
+        }
+
+        function reset(){
+                doucment.forms[0].reset();
+        }
+
+</script>
+
+</head>
+
+<body onload="getTime()">
+<form name="form" action="elevator.do?task=search" method="post">
+
+<div class="outFrame">
+        <div class="site_logo">
+                <img src="Images/logo.gif" alt="厦门市特种设备检验检测院" />
+        </div>
+        <div class="site_title">
+                <img src="Images/wap_title.gif" alt="厦门市特种设备检验检测院电梯信息查询系统" />
+        </div>
+        <div class="content">
+                <div class="search">
+                        <div class="textIn">注册号：<input class="textInput" type="text" name="regCod" /></div>
+                        <div class="textIn">设备号：<input class="textInput" type="text" name="eqpCod" value="T008858"/></div>
+                        <div class="textIn">短信号：<input class="textInput" type="text" name="smsCod" /></div>
+                        <div class="searchBtn"><a href="#" class="selectLink" onclick="submit()">[查询] </a><a href="#" class="selectLink" onclick="reset()">[重置] </a></div>
+                        <font color="RED"></font>
+                </div>
+                <div class="back"><a href="index.jsp" class="txtLink">返回首页</a></div>
+        </div>
+        <div id="time" class="footer"></div>
+</div>
+</form>
+<script>
+
+  if (document.all("eqpCod").value!="") {
+     document.all("form").submit();
+  }
+</script>
+</body>
+
+</html>

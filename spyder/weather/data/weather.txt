@@ -1,0 +1,36 @@
+厦门今日天气
+星期四
+http://img.tianqi.com/static/images/tianqibig/b2.png
+31℃~26℃
+阴
+南风 2级
+厦门明日天气
+星期五
+http://img.tianqi.com/static/images/tianqibig/b1.png
+32℃~26℃
+多云
+无持续风向 微风
+厦门后天天气
+星期六
+http://img.tianqi.com/static/images/tianqibig/b1.png
+34℃~27℃
+多云
+无持续风向 微风
+厦门06日天气
+星期日
+http://img.tianqi.com/static/images/tianqibig/b1.png
+35℃~27℃
+多云
+南风 3-4级
+厦门07日天气
+星期一
+http://img.tianqi.com/static/images/tianqibig/b1.png
+34℃~27℃
+多云
+西南风 3-4级
+厦门08日天气
+星期二
+http://img.tianqi.com/static/images/tianqibig/b1.png
+34℃~27℃
+多云
+南风 3-4级

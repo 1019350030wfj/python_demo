@@ -35,14 +35,13 @@ r_list = (r_name_cn,
           r_movie_duration,
           r_director)
 
+
 # 提取电影url
-def extract_urls(html):
-    result = ''
+def extract_urls(html, in_queue):
     segments = r_url.findall(html)
     host = "http://www.ygdy8.net"
     for segment in segments:
-        result = result + host + segment + '\n'
-    return result
+        in_queue.put(host + segment)
 
 
 # 提前电影详情
@@ -55,10 +54,10 @@ def extract_details(html):
             if not m:
                 field = ''
             else:
-                field = m.group(m.lastindex).replace('&nbsp;', '').replace((';', ',')).strip()
+                field = m.group(m.lastindex).replace('&nbsp;', '').replace(';', ',').strip()
             fields.append(field)
 
-        urls = r_download_url.findall(html)
+        urls = r_download_url.findall(html) #<class 'list'>: ['ftp://ygdy8:ygdy8@yg45.dydytt.net:8071/[阳光电影www.ygdy8.com].极寒之城.BD.720p.中英双字幕.mkv']
         field = ''
         if urls:
             for url in urls:
@@ -68,3 +67,4 @@ def extract_details(html):
         fields.append(field)
         details = ''.join(map(lambda x: '"' + x + '";', fields)) + '\n'
     return details
+#"极寒之城/极冻之城(台)/原子杀姬(港)/原子美人/最冷的城市";"Atomic Blonde";"2017";"美国";"动作/悬疑/惊悚";"英语";"中英双字幕";"2017-03-12(西南偏南电影节)/2017-07-28(美国)";"7.0/10 from 38,612 users";"1CD";"115分钟";"大卫&middot,里奇 David Leitch";"ftp://ygdy8:ygdy8@yg45.dydytt.net:8071/[阳光电影www.ygdy8.com].极寒之城.BD.720p.中英双字幕.mkv";

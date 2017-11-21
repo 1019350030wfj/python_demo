@@ -1,18 +1,13 @@
-# -*- coding:utf-8 -*-
-"""
-多线程爬取电影天堂最新电影列表
+# -*- coding: utf-8 -*-
 
-1.电影列表地址：'http://www.ygdy8.net/html/gndy/dyzz/list_23_{0}.html'.format(str(page))
-2.电影详情地址：从上面网址中截取
-3.访问详情地址，提取电影信息
-"""
+import sys
 import os
 import threading
-import time
 from queue import Queue
-
+import datetime
 import requests
 from re_util import *
+
 
 class Spider(threading.Thread):
     """
@@ -69,51 +64,40 @@ class Writer(threading.Thread):
 
 def do_request(url):
     try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36",
-            "Host": "www.ygdy8.net"
-        }
-        response = requests.get(url, headers=headers,timeout=10)
-        return response.text
-    except requests.exceptions.RequestException as e:
-        return ''
+        r = requests.get(url, timeout=30)
+        r.raise_for_status()
+        r.encoding = "utf-8"
+        return r.text
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+        return "ERROR"
 
 
-def fetch_movie_urls(filename):
-    if not os.path.isfile(filename):
-        with open(filename, 'w') as file_url:
-            base_url = 'http://www.ygdy8.net/html/gndy/dyzz/list_23_{0}.html'
-            for page in range(1, 2):
-                html = do_request(base_url.format(str(page)))
-                urls = extract_urls(html)
-                file_url.write(urls)
+def fetch_movie_urls(in_queue):
+    base_url = 'http://117.25.179.165:7003/wapq/elevator.do?task=search&eqpCod=T028592'
+    for page in range(1, 2):
+        html = do_request(base_url.format(str(page)))
+        extract_urls(html, in_queue)
 
 
 def main():
     directory = 'data'
     if not os.path.isdir(directory):
         os.makedirs(directory)
-    # 电影地址文件
-    path_urls = os.path.join(directory, 'movie_urls.txt')
-    # 电影详情文件
-    path_movies = os.path.join(directory, 'movies.txt')
+    # 电梯详情文件
+    path_movies = os.path.join(directory, 'lift_details.txt')
 
-    # 主线程爬取电影地址
-    fetch_movie_urls(path_urls)
-
-    # 多线程爬取电影详情
-    start = time.time()
     in_queue = Queue()
     out_queue = Queue()
-    with open(path_urls, 'r') as f:
-        lines = f.readlines()
-        for line in lines:
-            in_queue.put(line)
+
+    # 主线程爬取电影地址
+    fetch_movie_urls(in_queue)
+    # 多线程爬取电影详情
 
     # 启动记录线程
     writer = Writer(out_queue, filename=path_movies)
     writer.start()
-
+    start = datetime.datetime.now()
     # 启动爬虫线程
     spiders = [Spider(in_queue, out_queue) for i in range(10)]
     for s in spiders:
@@ -124,7 +108,7 @@ def main():
     # 爬虫线程结束，向输出线程发出结束信号
     writer.stop()
     writer.join()
-
+    print("spend time = " + str((datetime.datetime.now() - start).seconds))
 
 if __name__ == '__main__':
     main()

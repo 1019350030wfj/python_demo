@@ -11,7 +11,7 @@ from re_util import *
 
 class Spider(threading.Thread):
     """
-    1、从输入队列中提取电影详情url请求并提取有效信息
+    1、从输入队列中提取电梯详情url请求并提取有效信息
     2、将有效信息放入输出队列中供输出线程记录
     """
     def __init__(self, in_queue, out_queue):
@@ -73,11 +73,19 @@ def do_request(url):
         return "ERROR"
 
 
-def fetch_movie_urls(in_queue):
-    base_url = 'http://117.25.179.165:7003/wapq/elevator.do?task=search&eqpCod=T028592'
-    for page in range(1, 2):
-        html = do_request(base_url.format(str(page)))
-        extract_urls(html, in_queue)
+def fetch_lift_urls(in_queue):
+    base_url = 'http://117.25.179.165:7003/wapq/elevator.do?task=search&eqpCod=T0'
+    for i in range(1, 42500):
+        if i < 10:
+            in_queue.put(base_url+'0000' + str(i))
+        elif i < 100:
+            in_queue.put(base_url + '000' + str(i))
+        elif i < 1000:
+            in_queue.put(base_url + '00' + str(i))
+        elif i < 10000:
+            in_queue.put(base_url + '0' + str(i))
+        else:
+            in_queue.put(base_url + str(i))
 
 
 def main():
@@ -91,7 +99,7 @@ def main():
     out_queue = Queue()
 
     # 主线程爬取电影地址
-    fetch_movie_urls(in_queue)
+    fetch_lift_urls(in_queue)
     # 多线程爬取电影详情
 
     # 启动记录线程
@@ -99,7 +107,7 @@ def main():
     writer.start()
     start = datetime.datetime.now()
     # 启动爬虫线程
-    spiders = [Spider(in_queue, out_queue) for i in range(10)]
+    spiders = [Spider(in_queue, out_queue) for i in range(20)]
     for s in spiders:
         s.start()
     for s in spiders:

@@ -2,8 +2,9 @@
 
 import re
 
-# 匹配电梯详情
-r_device_category = re.compile(u"<p>设备品种：(.*?)</p>", re.DOTALL)
+# 匹配电梯详情 设备品种：
+# r_device_category = re.compile(u"<p>设备品种：(.*?)</p>", re.DOTALL)
+r_device_category = re.compile(u"<p>设备品种：(.*?)\(.*\)</p>", re.DOTALL)
 r_rated_load = re.compile(u"<p>额定载重：(.*?)</p>", re.DOTALL)
 r_layer_number = re.compile(u"<p>层数：(.*?)</p>", re.DOTALL)
 r_rated_speed = re.compile(u"<p>额定速度：(.*?)</p>", re.DOTALL)
@@ -53,10 +54,12 @@ r_list = (r_device_category,
 
 
 # 提前电梯详情
-def extract_details(html):
+def extract_details(html, url):
     details = ''
     if html:
         fields = []
+        if url.split("=")[-1]:
+            fields.append(url.split("=")[-1])
         for regex in r_list:
             m = regex.search(html)
             if not m:

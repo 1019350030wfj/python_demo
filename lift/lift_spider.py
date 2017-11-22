@@ -33,7 +33,7 @@ class Spider(threading.Thread):
     @staticmethod
     def process(url):
         html = do_request(url)
-        return extract_details(html)
+        return extract_details(html, url)
 
 
 class Writer(threading.Thread):
@@ -75,7 +75,7 @@ def do_request(url):
 
 def fetch_lift_urls(in_queue):
     base_url = 'http://117.25.179.165:7003/wapq/elevator.do?task=search&eqpCod=T0'
-    for i in range(1, 42500):
+    for i in range(1, 42996):
         if i < 10:
             in_queue.put(base_url+'0000' + str(i))
         elif i < 100:
@@ -107,7 +107,7 @@ def main():
     writer.start()
     start = datetime.datetime.now()
     # 启动爬虫线程
-    spiders = [Spider(in_queue, out_queue) for i in range(20)]
+    spiders = [Spider(in_queue, out_queue) for i in range(10)]
     for s in spiders:
         s.start()
     for s in spiders:

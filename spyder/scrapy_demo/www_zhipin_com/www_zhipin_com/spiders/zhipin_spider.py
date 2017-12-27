@@ -36,7 +36,46 @@ class ZhipinSpider(scrapy.Spider):
     def start_requests(self):
         return [self.next_request()]
 
-    # 负责处理response并返回吹的数据以及（/或）跟进的URL。
+
+    # 负责处理response并返回处理的数据以及( / 或)跟进的URL。
     def parse(self, response):
         print("request -> " + response.url)
-        job_list = response.css()
+        job_list = response.css('div.job-list > ul > li')
+        for job in job_list:
+            item = WwwZhipinComItem()
+            job_primary = job.css('div.job-primary')
+            item['pid'] = job_primary.css('div.info-primary > h3 > a::attr(data-jobid)').extract_first().strip()
+            item['positionName'] = job_primary.css('div.info-primary > h3 > a::text').extract_first().strip()
+            print(job_primary.css('div.info-primary > h3 > a > span::text').extract_first())
+            item['salary'] = job_primary.css('div.info-primary > h3 > a > span::text').extract_first().strip()
+            info_primary = job_primary.css(
+                'div.info-primary > p::text').extract()
+            print(info_primary)
+            item['city'] = info_primary[0].strip()
+            item['workYear'] = info_primary[1].strip()
+            item['education'] = info_primary[2].strip()
+            item['companyShortName'] = job_primary.css(
+                'div.info-company > div.company-text > h3 > a::text'
+            ).extract_first().strip()
+            company_infos = job_primary.css(
+                'div.info-company > div.company-text > p::text').extract()
+            if len(company_infos) == 3:  # 有一条招聘这里只有两项，所以加个判断
+                item['industryField'] = company_infos[0].strip()
+                item['financeStage'] = company_infos[1].strip()
+                item['companySize'] = company_infos[2].strip()
+            item['positionLables'] = job.css(
+                'li > div.job-tags > span::text').extract()
+            item['time'] = job.css('span.time::text').extract_first().strip()
+            item['updated_at'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            yield item
+        # self.curPage += 1
+        # time.sleep(5)  # 停停停！听听听！都给我停下来听着！睡一会(～﹃～)~zZ
+        # yield self.next_request()
+
+    # 发送请求
+    def next_request(self):
+        return scrapy.http.FormRequest(
+            self.positionUrl + ("&page=%d&ka=page-%d" %
+                                (self.curPage, self.curPage)),
+            headers=self.headers,
+            callback=self.parse)

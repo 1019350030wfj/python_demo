@@ -59,6 +59,7 @@ def load_data(conn, data_path):
         print("Unexpected error:", sys.exc_info()[0])
         conn.rollback()
 
+
 if __name__ == '__main__':
     connection = pymysql.connect("localhost", "root", "root", "lift_detail", local_infile=1)
     create_table(connection)

@@ -12,6 +12,8 @@ def index():
 
 
 import contextlib
+
+
 # 定义上下文管理器，连接后自动关闭连接
 @contextlib.contextmanager
 def mysql(host='127.0.0.1', port=3306, user='root', passwd='root', db='lift_detail', charset='utf8'):
@@ -36,8 +38,8 @@ def getDataByCategory(device_category):
         row_count = cursor.execute("select * from lift_details_notd where r_device_category=%s", (device_category))
         # row_1 = cursor.fetchone()
         return jsonify(status=200,
-                   info=json.dumps(cursor.fetchall()),
-                   msg='success')
+                       info=json.dumps(cursor.fetchall()),
+                       msg='success')
     conn.commit()
     cursor.close()
     conn.close()

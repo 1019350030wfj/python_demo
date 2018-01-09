@@ -11,8 +11,8 @@ import time, sys
 class huoche(object):
     """docstring for huoche"""
     # 用户名，密码
-    username = u"wfj1019350030"
-    passwd = u"wfj2009"
+    username = u"15515608716"
+    passwd = u"04071124well"
     # cookies值得自己去找, 下面两个分别是上海, 太原南
     starts = u"%u53A6%u95E8%2CXMS"
     ends = u"%u6F2F%u6CB3%2CLON"
@@ -30,8 +30,7 @@ class huoche(object):
     ticket_url = "https://kyfw.12306.cn/otn/leftTicket/init"
     login_url = "https://kyfw.12306.cn/otn/login/init"
     initmy_url = "https://kyfw.12306.cn/otn/index/initMy12306"
-    buy = "https://kyfw.12306.cn/otn/confirmPassenger/initDc"
-    login_url = 'https://kyfw.12306.cn/otn/login/init'
+    buy = "https://kyfw.12306.cn/otn//payOrder/init?random="
 
     def login(self):
         self.driver.visit(self.login_url)
@@ -108,15 +107,16 @@ class huoche(object):
             # self.driver.find_by_id('1D').last.click()
             # self.driver.find_by_id('1F').last.click()
 
-            sleep(1.5)
             print u"确认选座..."
-            self.driver.find_by_id('1C').click()
-            sleep(1.5)
-            print u"确认支付..."
-            self.driver.find_by_id('qr_submit_id').click()
-            sleep(1)
-            print u"网上支付..."
-            self.driver.find_by_id('payButton').click()
+            while True:
+                if self.buy in self.driver.url:
+                    print u"网上支付..."
+                    # sleep(1.5)
+                    self.driver.find_by_id('payButton').click()
+                    break
+                else:
+                    sleep(1)
+
 
         except Exception as e:
             print e

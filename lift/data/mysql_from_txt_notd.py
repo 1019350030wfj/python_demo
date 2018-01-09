@@ -5,8 +5,8 @@ import sys
 
 
 def create_table(conn):
-    sql_drop_table = "drop table if EXISTS details_notd;"
-    sql_create_table = "create table if not exists details_notd(" \
+    sql_drop_table = "drop table if EXISTS lift_details_notd;"
+    sql_create_table = "create table if not exists lift_details_notd(" \
                        "_id int auto_increment," \
                        "device_id varchar(16)," \
                        "r_device_category varchar(64)," \
@@ -58,6 +58,7 @@ def load_data(conn, data_path):
     except:
         print("Unexpected error:", sys.exc_info()[0])
         conn.rollback()
+
 
 if __name__ == '__main__':
     connection = pymysql.connect("localhost", "root", "root", "lift_detail", local_infile=1)

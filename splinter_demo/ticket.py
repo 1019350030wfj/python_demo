@@ -21,7 +21,7 @@ class huoche(object):
     # 车次，选择第几趟，0则从上之下依次点击
     order = 0
     ###乘客名
-    users = [u"黄银平", u"黄慧芳"]
+    users = [u"黄银平", u"王福军"]
     ##席位
     xb = u"二等座"
     pz = u"成人票"
@@ -46,7 +46,7 @@ class huoche(object):
                 break
 
     def start(self):
-        self.driver = Browser()
+        self.driver = Browser('chrome')
         self.driver.driver.set_window_size(1400, 1000)
         self.login()
         # sleep(1)
@@ -108,15 +108,15 @@ class huoche(object):
             # self.driver.find_by_id('1D').last.click()
             # self.driver.find_by_id('1F').last.click()
 
-            sleep(1.5)
             print u"确认选座..."
-            self.driver.find_by_id('1C').click()
-            sleep(1.5)
-            print u"确认支付..."
-            self.driver.find_by_id('qr_submit_id').click()
-            sleep(1)
-            print u"网上支付..."
-            self.driver.find_by_id('payButton').click()
+            while True:
+                if self.buy in self.driver.url:
+                    print u"网上支付..."
+                    # sleep(1.5)
+                    self.driver.find_by_id('payButton').click()
+                    break
+                else:
+                    sleep(1)
 
         except Exception as e:
             print e

@@ -17,7 +17,7 @@ class huoche(object):
     starts = u"%u53A6%u95E8%2CXMS"
     ends = u"%u6F2F%u6CB3%2CLON"
     # 时间格式2018-01-13
-    dtime = u"2018-01-13"
+    dtime = u"2018-02-10"
     # 车次，选择第几趟，0则从上之下依次点击
     order = 0
     ###乘客名

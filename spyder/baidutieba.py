@@ -15,6 +15,7 @@ def get_html(url):
     except:
         return "ERROR"
 
+
 def get_content(url):
     '''
     分析贴吧的网页文件，整理信息，保存到列表变量中
@@ -43,12 +44,13 @@ def get_content(url):
             comment['link'] = "http://tieba.baidu.com/" + \
                               li.find('a', attrs={'class': "j_th_tit "})['href']
             comment['name'] = li.find('a', attrs={'class': 'frs-author-name j_user_card '}).text.strip()
-            comment['time'] = li.find('span', attrs={'class':'pull-right is_show_create_time'}).text.strip()
-            comment['replyNum'] = li.find('span',attrs={'class':'threadlist_rep_num center_text'}).text.strip()
+            comment['time'] = li.find('span', attrs={'class': 'pull-right is_show_create_time'}).text.strip()
+            comment['replyNum'] = li.find('span', attrs={'class': 'threadlist_rep_num center_text'}).text.strip()
             comments.append(comment)
         except:
             print('获取帖子信息错误！！！')
     return comments
+
 
 def out2File(dict):
     '''
@@ -59,19 +61,23 @@ def out2File(dict):
     '''
     with open('TTBT.txt', 'a+', encoding='utf-8') as f:
         for comment in dict:
-            f.write('标题: {} \t 链接：{} \t 发帖人：{} \t 发帖时间: {} \t 回复数量: {} \n'.format(comment['title'], comment['link'], comment['name'], comment['time'], comment['replyNum']))
+            f.write('标题: {} \t 链接：{} \t 发帖人：{} \t 发帖时间: {} \t 回复数量: {} \n'.format(comment['title'], comment['link'],
+                                                                                  comment['name'], comment['time'],
+                                                                                  comment['replyNum']))
         print('当前页面爬取完成')
+
 
 def main(base_url, deep):
     url_list = []
     for i in range(0, deep):
-        url_list.append(base_url + "&pn=" + str(50*i))
+        url_list.append(base_url + "&pn=" + str(50 * i))
 
     # 循环写入所有数据
     for url in url_list:
         content = get_content(url)
         out2File(content)
     print("所有的信息已经保存到文件！")
+
 
 base_url = 'http://tieba.baidu.com/f?kw=%E7%94%9F%E6%B4%BB%E5%A4%A7%E7%88%86%E7%82%B8&ie=utf-8'
 deep = 1

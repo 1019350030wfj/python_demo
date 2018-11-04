@@ -12,9 +12,10 @@ import requests
 from bs4 import BeautifulSoup
 from bs4.element import NavigableString
 
+
 def get_html(url, cookies):
     try:
-        r = requests.get(url, headers={'cookie':cookies}, timeout=30)  # 不用转换为字典
+        r = requests.get(url, headers={'cookie': cookies}, timeout=30)  # 不用转换为字典
         # r = requests.get(url, cookies=cookies, timeout=30)  转换为字典类型
         r.raise_for_status()
         r.encoding = r.apparent_encoding
@@ -36,7 +37,7 @@ def get_url(url):
 
 def get_one_data(url, cookie):
     r = get_html(url, cookie)
-    soup = BeautifulSoup(r,'lxml')
+    soup = BeautifulSoup(r, 'lxml')
 
     date = soup.find('div', class_='info').contents[1]
     # 判断是否抓到了数据
@@ -48,6 +49,7 @@ def get_one_data(url, cookie):
     with open('hrb400_20MM.txt', 'a+', encoding="utf-8") as f:
         f.write(date + '\t' + data + '\n')
     print('当前处理日期{}'.format(date))
+
 
 if __name__ == '__main__':
     base_url = 'http://search.mysteel.com/price/list.ms?page='

@@ -3,14 +3,16 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 def get_html(url):
     try:
-        r = requests.get(url, timeout = 30)
+        r = requests.get(url, timeout=30)
         r.raise_for_status()
         r.encoding = "utf-8"
         return r.text
     except:
         return "ERROR"
+
 
 def get_content(url):
     '''
@@ -66,6 +68,7 @@ def get_content(url):
 
     return url_list
 
+
 def get_txt_url(url):
     '''
     获取该小说每个章节的url地址：
@@ -86,7 +89,8 @@ def get_txt_url(url):
 
     return url_list, txt_name
 
-def get_one_txt(url,txt_name):
+
+def get_one_txt(url, txt_name):
     '''
     获取小说每个章节的文本
     并写入到本地
@@ -98,7 +102,7 @@ def get_one_txt(url,txt_name):
     soup = BeautifulSoup(html, 'lxml')
     try:
         txt = soup.find('div', id='content').text.replace(
-            'chaptererror();', '' )
+            'chaptererror();', '')
         title = soup.find('title').text
         with open('novels/{}.txt'.format(txt_name), 'a', encoding='utf-8') as f:
             f.write(title + '\n\n')
@@ -106,6 +110,7 @@ def get_one_txt(url,txt_name):
             print('当前小说:{} 当前章节{} 已经下载完毕'.format(txt_name, title))
     except:
         print('something wrong')
+
 
 def get_all_txt(url_list):
     '''
@@ -128,6 +133,7 @@ def get_all_txt(url_list):
         # 先遍历第一篇小说
         break
 
+
 def main():
     # 排行榜地址：
     base_url = 'http://www.qu.la/paihangbang'
@@ -136,6 +142,7 @@ def main():
     # 除去重复的小说，增加效率
     url_list = list(set(url_list))
     get_all_txt(url_list)
+
 
 if __name__ == '__main__':
     main()

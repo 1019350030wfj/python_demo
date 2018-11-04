@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import sys
 
+
 class Downloader(object):
     def __init__(self):
         self.server = 'http://www.biqukan.com/'
@@ -29,7 +30,7 @@ class Downloader(object):
         html = req.text
         bf = BeautifulSoup(html, 'lxml')
         texts = bf.find_all('div', class_='showtxt')
-        texts = texts[0].text.replace('\xa0'*8, '\n\n')
+        texts = texts[0].text.replace('\xa0' * 8, '\n\n')
         return texts
 
     def writer(self, name, path, text):
@@ -38,13 +39,13 @@ class Downloader(object):
             f.writelines(text)
             f.write('\n\n')
 
+
 if __name__ == '__main__':
     dl = Downloader()
     dl.get_download_url()
     print('<<一年永恒>>开始下载：')
     for i in range(dl.nums):
         dl.writer(dl.names[i], '一年永恒.txt', dl.get_contents(dl.urls[i]))
-        sys.stdout.write(' downloaded: %.3f%' % float(i/dl.nums) + '\r')
+        sys.stdout.write(' downloaded: %.3f%' % float(i / dl.nums) + '\r')
         sys.stdout.flush()
     print('《一年永恒》下载完成')
-
